@@ -70,3 +70,5 @@ if __name__ == '__main__':
     # Se ejecuta cada funcion por analizar.
     cero_eventos()
     un_evento()
+
+
