@@ -1,0 +1,19 @@
+repetir = "s"
+
+while repetir == "s" or repetir == "S" or repetir == "Si" or repetir == "si":
+    numero = str(input("Ingrese numero telefonico: ")).strip()
+    hora = int(input("Ingrese hora de la llamada: "))
+    contestar = False
+
+    if hora > 0 and hora <= 7:
+        contestar = True
+    elif hora < 14:
+        contestar = int(numero[-3:]) == 909
+    elif hora < 19:
+        contestar = hora >= 17 and not (int(numero[:3]) == 877)
+    else:
+        contestar = False
+
+    print("CONTESTAR" if contestar else "NO CONTESTAR")
+
+    repetir = input("Deseas consultar por un nuevo numero y horario? (si/no): ")
