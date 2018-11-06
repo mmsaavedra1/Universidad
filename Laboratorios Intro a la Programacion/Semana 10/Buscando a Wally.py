@@ -16,4 +16,4 @@ while True:
         lista = lista[:centro]
     else:
         print("W")
-        brea
+        break
