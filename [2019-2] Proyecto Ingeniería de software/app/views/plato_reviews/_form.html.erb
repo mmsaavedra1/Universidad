@@ -1,0 +1,18 @@
+
+<%= simple_form_for([@plato, @plato.plato_reviews.build]) do |f| %>
+  <div id="rating-form">
+    <label>Valoración</label>
+  </div>
+  <%= f.input :comentario %>
+  <%= f.hidden_field :id_restaurante, value: params[:id_restaurante] %>
+
+  <%= f.button :submit, class: "btn btn-outline-dark" %>
+  <%= link_to "Back", plato_path(@plato,:id_restaurante => params[:id_restaurante] ), class: "btn btn-outline-dark" %>
+<% end %>
+
+<script>
+    $('#rating-form').raty({
+        path: '/assets/',
+        scoreName: 'plato_review[rating]'
+    });
+</script>

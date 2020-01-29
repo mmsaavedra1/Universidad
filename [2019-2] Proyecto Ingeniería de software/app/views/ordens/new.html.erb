@@ -1,0 +1,15 @@
+<% @plato = Plato.find(params[:plato_id]) %>
+
+<h1>Nueva orden</h1>
+
+<%= simple_form_for @orden do |f| %>
+  <%= f.input :direccion_de_envio, :label => "Anota la direccion de envío del pedido" %>
+  <%= f.input :notas, :label => "Algún comentario extra para tu pedido"%>
+  <%= f.button :submit, class: "btn btn-outline-dark" %>
+  <%= link_to "Volver", restaurantes_path(params[:restaurante_id]), class: "btn btn-outline-dark" %>
+
+  <%= f.hidden_field :restaurante_id, value: params[:restaurante_id] %>
+  <%= f.hidden_field :plato_id, value: params[:plato_id] %>
+
+
+<% end %>

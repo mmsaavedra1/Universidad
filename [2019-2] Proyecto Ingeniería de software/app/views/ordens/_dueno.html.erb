@@ -1,0 +1,146 @@
+<!-- Primero se analiza si tiene pedidos asociados a su nombre -->
+<% ordenes_usuario = Orden.where(:restaurante_id => Restaurante.where(:correo => current_user.email)) %>
+
+<!-- Si no ha realizado pedidos, no se realiza nada -->
+<% if ordenes_usuario.count == 0 %>
+  <h1 align="center"> Aún no han realizado pedidos en el restaurante 😢 </h1>
+  <!-- Si ha realizado pedidos, estos se ordenan y despliegan -->
+<% else %>
+  <!-- Se despliegan aquellos que están proceso -->
+  <div class="container text-center">
+    <% unless ordenes_usuario.where(:estado => "En proceso").count == 0 %>
+      <div>
+        <h1 align="center"> Pedidos en proceso</h1>
+        <table class="table table-hover">
+
+          <thead>
+          <tr>
+            <th scope="col">Nombre producto</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Direccion de entrega</th>
+            <th scope="col">Hora de entrega</th>
+            <th scope="col">Estado del pedido</th>
+            <th scope="col">Notas del pedido</th>
+            <th scope="col"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% indice = 0 %>
+          <% ordenes_usuario.where(:estado => "En proceso").each do |orden| %>
+            <tr>
+              <td><%= Plato.find(orden.plato_id).nombre %></td>
+              <td><%= "$#{orden.precio}" %></td>
+              <td><%= orden.direccion_de_envio %></td>
+              <td><%= orden.hora_llegada %></td>
+              <td><%= orden.estado %></td>
+              <td><%= orden.notas %></td>
+              <td><%= link_to "Cancelar pedido", orden_path(orden), data: { confirm: '¿Confirmas cancelación del pedido?'}, class: "btn btn-outline-danger my-2 my-sm-0" %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+      <br> <br>
+    <% end %>
+  </div>
+
+  <!-- Se despliegan aquellos que están entregados -->
+  <div class="container text-center">
+    <% unless ordenes_usuario.where(:estado => "Entregado").count == 0 %>
+      <div>
+        <h1 align="center"> Pedidos entregados</h1>
+        <table class="table table-hover">
+
+          <thead>
+          <tr>
+            <th scope="col">Nombre producto</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Direccion de entrega</th>
+            <th scope="col">Hora de entrega</th>
+            <th scope="col">Estado del pedido</th>
+            <th scope="col">Notas del pedido</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% entregados = Hash.new %>
+          <% indice = 0 %>
+          <% ordenes_usuario.where(:estado => "Entregado").each do |orden| %>
+            <% entregados[orden.hora_llegada.strftime("%H:%M %d/%m/%Y")] = orden.precio %>
+            <tr>
+              <td><%= Plato.find(orden.plato_id).nombre %></td>
+              <td><%= "$#{orden.precio}" %></td>
+              <td><%= orden.direccion_de_envio %></td>
+              <td><%= orden.hora_llegada %></td>
+              <td><%= orden.estado %></td>
+              <td><%= orden.notas %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+        <%= line_chart entregados, xtitle: "Hora entrega", ytitle: "Dinero gastado", title: "Utilidades en órdenes en el tiempo" %>
+        <br>
+        <!-- Segundo  estadistico -->
+        <% entregados = Hash.new %>
+        <% ordenes_usuario.where(:estado => "Entregado").each do |orden| %>
+          <% if entregados.key?(Plato.find(orden.plato_id).nombre) %>
+            <% entregados[Plato.find(orden.plato_id).nombre] += orden.precio %>
+          <% else %>
+            <% entregados[Plato.find(orden.plato_id).nombre] = orden.precio %>
+          <% end %>
+        <% end %>
+        <%= pie_chart entregados, title: "Utilidades en órdenes por producto" %>
+      </div>
+      <br><br>
+    <% end %>
+  </div>
+
+  <!-- Se despliegan aquellos que fueron cancelados -->
+  <div class="container text-center">
+    <% unless ordenes_usuario.where(:estado => "Cancelado").count == 0 %>
+      <div>
+        <h1 align="center"> Pedidos cancelados</h1>
+        <table class="table table-hover">
+
+          <thead>
+          <tr>
+            <th scope="col">Nombre producto</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Direccion de entrega</th>
+            <th scope="col">Hora de entrega</th>
+            <th scope="col">Estado del pedido</th>
+            <th scope="col">Notas del pedido</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% cancelados = Hash.new %>
+          <% indice = 0 %>
+          <% ordenes_usuario.where(:estado => "Cancelado").each do |orden| %>
+            <% cancelados[orden.hora_llegada.strftime("%H:%M %d/%m/%Y")] = orden.precio %>
+            <tr>
+              <td><%= Plato.find(orden.plato_id).nombre %></td>
+              <td><%= "$#{orden.precio}" %></td>
+              <td><%= orden.direccion_de_envio %></td>
+              <td><%= orden.hora_llegada %></td>
+              <td><%= orden.estado %></td>
+              <td><%= orden.notas %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+        <!-- Primer estadistico -->
+        <%= line_chart cancelados, xtitle: "Hora entrega", ytitle: "Dinero gastado", title: "Pérdidas en órdenes en el tiempo" %>
+        <br>
+        <!-- Segundo  estadistico -->
+        <% cancelados = Hash.new %>
+        <% ordenes_usuario.where(:estado => "Cancelado").each do |orden| %>
+          <% if cancelados.key?(Plato.find(orden.plato_id).nombre) %>
+            <% cancelados[Plato.find(orden.plato_id).nombre] += orden.precio %>
+          <% else %>
+            <% cancelados[Plato.find(orden.plato_id).nombre] = orden.precio %>
+          <% end %>
+        <% end %>
+        <%= pie_chart cancelados, title: "Pérdidas en órdenes por producto" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

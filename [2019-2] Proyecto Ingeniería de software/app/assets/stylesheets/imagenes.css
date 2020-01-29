@@ -1,0 +1,34 @@
+
+/* Clase de estilo para las imagenes de restaurante */
+.restaurante_index{
+    height: 250px;
+    width: 250px;
+}
+
+.restaurante_show {
+    height: 150px;
+    width: 150px;
+}
+
+/* Clase de estilo para las imagenes de plato */
+
+.plato{
+    height: 250px;
+    width: 250px;
+}
+
+.plato_show{
+    height: 150px;
+    width: 150px;
+}
+
+/* Clase de estilo para las imagenes de usuario */
+.user{
+    height: 250px;
+    width: 250px;
+}
+
+.user_show {
+    height: 250px;
+    width: 250px;
+}

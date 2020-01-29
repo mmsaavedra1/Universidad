@@ -1,0 +1,96 @@
+** Referencias de atributos dentro de la pagina **
+
+
+Usuario
+- Nombre
+- Correo
+- idImagen
+- Direccion
+- Tipo
+
+docker-compose run web rails generate scaffold usuario nombre:string correo:string id_imagen:integer direccion:text tipo:integer
+
+
+
+Restaurante
+- Nombre
+- Correo
+- Direccion
+- Valoracion
+- idImagen
+- Numero Telefono
+
+docker-compose run web rails generate scaffold restaurante nombre:string correo:string direccion:text valoracion:integer numero_telefono:string
+
+
+Plato
+- Nombre
+- Precio
+- Descripcion
+- Cantidad Personas Sugerida.
+- idImagen
+- Valoracion.
+
+docker-compose run web rails generate scaffold plato nombre:string descripcion:text cantidad_personas_sugeridas:integer valoracion:integer
+
+
+Orden
+- Precio final a pagar
+- Medio De pago
+- Direccion De Envío
+- Hora de entrega
+- Estado del pedido
+- Notas
+
+docker-compose run web rails generate scaffold orden precio_final:integer medio_de_pago:integer direccion_envio:text hora_estimada_entrega:datetime estado_pedido:integer notas:text
+
+
+Comentario
+- Restaurante/Plato al que pertenece (*)
+- Usuario
+- Fecha y hora de creacion
+- Contenido
+- Puntaje de reputacion
+
+docker-compose run web rails generate scaffold comentario fecha_creacion:date contenido:text puntaje:int
+
+
+
+** Asociaciones **
+
+1º Orden de Usuario (Usuario tiene muchas ordenes)
+
+docker-compose run web rails generate model OrdenDeUsuario
+
+
+2º Restaurantes Favoritos de usuario
+
+docker-compose run web rails generate model UsuarioRestauranteFav
+
+
+3º Plato de Restaurante en una orde
+
+docker-compose run web rails generate model PlatoDeRestauranteEnOrden
+
+4º Link de imagenes para cada CRUD (?)
+
+docker-compose run web rails generate model Imagen
+
+5º Comentario de un Usuario en Plato de un Restaurante
+
+docker-compose run web rails generate model
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

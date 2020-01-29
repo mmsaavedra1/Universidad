@@ -1,0 +1,51 @@
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
+
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= image_tag current_user.user_img.url(:user_show)%>  <br><br>
+
+    <b> Elige una foto</b>
+    <%= f.file_field :user_img,
+                     input_html: { autocomplete: "Imagen de perfil" }%><br>
+    <%= f.input :nombre,
+                require: true,
+                autofocus: true,
+                input_html: { autocomplete: "nombre" }%>
+    <%= f.input :direccion,
+                require: true,
+                autofocus: true,
+                input_html: { autocomplete: "direccion" }%>
+    <%= f.input :email, required: true, autofocus: true %>
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+    <% end %>
+
+    <%= f.input :password,
+                hint: "leave it blank if you don't want to change it",
+                required: false,
+                input_html: { autocomplete: "new-password" } %>
+    <%= f.input :password_confirmation,
+                required: false,
+                input_html: { autocomplete: "new-password" } %>
+    <%= f.input :current_password,
+                hint: "we need your current password to confirm your changes",
+                required: true,
+                input_html: { autocomplete: "current-password" } %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn  btn-outline-dark" %>
+    <%= link_to "Back", :back, class: "btn  btn-outline-dark" %>
+  </div>
+<% end %>
+
+<br>
+<h3>Cancel my account</h3>
+
+<p>Unhappy?</p>
+<%= link_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: "btn  btn-outline-danger" %>
+
+

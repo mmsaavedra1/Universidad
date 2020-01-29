@@ -1,0 +1,75 @@
+<% restaurante = Restaurante.find(params[:id_restaurante]) %>
+
+
+<div class="row">
+
+  <!-- Aqui es donde iran los comentarios-->
+  <div class="col-12 col-md-3 text-center">
+    <h3  font="arial">Comentarios del Plato</h3>
+    <br>
+    <!-- Se depliegan los comentarios -->
+    <%= render @plato.plato_reviews %>
+
+    <!-- Se puede comentar -->
+    <div>
+      <% if user_signed_in? %>
+        <%= link_to "Dejar comentario", new_plato_plato_review_path(@plato, :id_restaurante => params[:id_restaurante]), class: "btn btn-outline-dark" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+  </div>
+
+  <div class="col-md-2">
+    <%= image_tag @plato.plato_img.url(:medium), class: "img-responsive center-block" %>
+  </div>
+  <div class="col-md-1"></div>
+
+  <div class="col-md-5">
+    <h2><%= @plato.nombre %></h2>
+    <div class="average-review-rating" data-score="<%= @average_review %>"></div>
+    <h3> <%="$#{@plato.precio}"%></h3>
+    <p> <%=@plato.descripcion %></p>
+    <p> <b> Cantidad personas: </b> <%=@plato.cantidad_personas_sugeridas%> </p>
+
+    <!-- Solo si el usuario administrador está logeado se puede tomar accion de edicion y elminacion-->
+    <% if user_signed_in? %>
+      <% if current_user.email == restaurante.correo %>
+        <td><%= link_to 'Editar plato', edit_plato_path(@plato, id_restaurante: params[:id_restaurante]), class: "btn  btn-outline-dark btn-sm" %></td>
+        <td><%= link_to 'Eliminar plato', plato_path(@plato, id_restaurante: params[:id_restaurante]), method: :delete, data: { confirm: '¿Confirmas eliminación del plato?' }, class: "btn  btn-outline-danger btn-sm" %></td>
+      <% end %>
+      <% unless Restaurante.where(:correo => current_user.email).count != 0 || current_user.email == "admin@uc.cl" %>
+        <td><%= link_to 'Realizar pedido', new_orden_path(plato_id: @plato.id, restaurante_id: params[:id_restaurante]), class: "btn btn-outline-dark btn-sm"  %></td>
+      <% end %>
+    <% end %>
+  </div>
+
+</div>
+
+  <!-- Volver al catálogo de platos -->
+  <br><br>
+  <h1 align="center"><%= link_to '⭑ Volver al catálogo del restaurante ⭑', restaurante_path(params[:id_restaurante]), class:"btn btn-outline-dark btn-lg btn-block" %></h1>
+
+
+  <!-- Script para hacer visible la valoracion de cada comentario-->
+  <script>
+      $('.review-rating').raty({
+          readOnly: true,
+          score: function() {
+              return $(this).attr('data-score');
+          },
+          path: '/assets/'
+      });
+  </script>
+
+  <!-- Script para hacer visible el promedio de valoracion -->
+  <script>
+      $('.average-review-rating').raty({
+          readOnly: true,
+          score: function() {
+              return $(this).attr('data-score');
+          },
+          path: '/assets/'
+      });
+  </script>

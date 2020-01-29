@@ -1,0 +1,20 @@
+<!-- Se ve si está poblado el sistema -->
+<% if @ordenes.count == 0 %>
+  <h1 align="center">No se ha realizado ningun pedido aún 😭</h1>
+<% else %>
+  <!-- Se analiza si es un usuario o dueño de restaurante quien revisa -->
+  <% visita = 1 %>
+  <% Restaurante.all.each do |restaurante| %>
+    <% if current_user.email == restaurante.correo %>
+      <% visita = 0 %>
+      <% break %>
+    <% end %>
+  <% end %>
+  <!-- Se realizan las acciones si es un usuario normal -->
+  <% if visita == 1 %>
+    <%= render 'normal' %>
+  <!-- Se realizan las acciones si es un usuario dueño de restaurante -->
+  <% else %>
+    <%= render 'dueno' %>
+  <% end %>
+<% end %>

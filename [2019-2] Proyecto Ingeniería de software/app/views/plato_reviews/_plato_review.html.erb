@@ -1,0 +1,19 @@
+<%= hidden_field_tag(:id_restaurante, params[:id_restaurante]) %>
+<h4> <%= User.find(plato_review.user_id).nombre%>:</h4>
+<p>"<%= plato_review.comentario %>"</p>
+<div class="review-rating" data-score="<%= plato_review.rating %>"></div>
+
+<% if user_signed_in? %>
+  <% if current_user.id == plato_review.user_id %>
+    <br>
+    <%= link_to 'Editar', edit_plato_plato_review_path(plato_review.plato, plato_review, :id_restaurante => params[:id_restaurante]), class: "btn btn-outline-dark" %>
+  <% end %>
+
+  <% if current_user.id == plato_review.user_id || current_user.email == "admin@uc.cl" %>
+    <%= link_to 'Eliminar', plato_plato_review_path(plato_review.plato, plato_review, :id_restaurante => params[:id_restaurante] ), method: :delete,
+        data: {confirm: '¿Segur@ que deseas eliminar tu comentario?'},class: "btn  btn-outline-danger",
+        id_restaurante: params[:id_restaurante]%>
+    <br>
+  <% end %>
+<% end %>
+<br>

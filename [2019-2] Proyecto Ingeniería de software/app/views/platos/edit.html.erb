@@ -1,0 +1,20 @@
+<h1>Editing Plato</h1>
+
+
+<%= simple_form_for(@plato, url: plato_path(@plato, :id_restaurante => params[:id_restaurante])) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.file_field :plato_img %>
+    <%= f.input :nombre %>
+    <%= f.input :descripcion %>
+    <%= f.input :cantidad_personas_sugeridas %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class:"btn btn-outline-dark my-2 my-sm-0"%>
+    <%= link_to 'Back', restaurante_path(params[:id_restaurante]), class:"btn btn-outline-dark my-2 my-sm-0" %>
+  </div>
+<% end %>
+

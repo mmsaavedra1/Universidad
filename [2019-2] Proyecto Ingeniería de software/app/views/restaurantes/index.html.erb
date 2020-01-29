@@ -1,0 +1,49 @@
+<!-- Menu de despliegue de los restaurantes -->
+
+<!-- Menu de busquedas fracasadas-->
+<%  if params[:search] && @restaurantes.count == 0%>
+  <h1 align="center">¡La búsqueda no arrojó resultados!</h1>
+  <h1 align="center">😭😭😭😭</h1>
+
+<!-- Menu de busquedas exitosas -->
+<%  elsif @restaurantes.count == 0%>
+  <h1 align="center">¡No hay restaurante registrados hasta el momento!</h1>
+
+<!-- Menu normal -->
+<% else %>
+    <% if params[:search] %>
+      <div class="row text-center">
+        <h1 align="center"> Resutaldos de: '<%=params[:search] %>'. Selecciona el restaurante que desees ordenar: </h1>
+      </div>
+    <% else %>
+      <% if user_signed_in? %>
+        <% favoritos = Favorito.where(:user_id => current_user.id) %>
+        <% if favoritos.count != 0 %>
+          <h1 align="center"> ⭑ Tus restaurantes favoritos ⭑ </h1>
+          <div class="row text-center">
+          <% favoritos.each do |favorito| %>
+            <% restaurante = Restaurante.find(favorito.restaurante_id) %>
+            <div class="col-12 col-md-4">
+              <%= link_to image_tag(restaurante.restaurante_img.url(:medium), class: "center-block"),
+                          restaurante_path(restaurante)%>
+              <h2 align="center"><%= restaurante.nombre %></h2>
+            </div>
+          <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <!-- Se despliega el catologo completo de restaurantes -->
+    <h1 align="center">Catálogo de restaurantes</h1>
+    <div class="row text-center">
+    <% @restaurantes.order(:nombre).each do |restaurante| %>
+      <div class="col-12 col-md-4">
+          <%= link_to image_tag(restaurante.restaurante_img.url(:medium), class: "center-block"),
+                      restaurante_path(restaurante)%>
+          <h2 align="center"><%= restaurante.nombre %></h2>
+      </div>
+    <% end %>
+    </div>
+
+<% end %>

@@ -1,0 +1,30 @@
+<h1 align="center">Resutaldos de la búsqueda:</h1>
+<h1 align="center">Selecciona el restaurante que desees ordenar</h1>
+
+<% if params[:opcion] == '0' %>
+  <div class="row text-center">
+    <% @search.restaurante.each do |restaurante| %>
+      <div class="col-12 col-md-4">
+        <%= link_to image_tag(restaurante.restaurante_img.url(:restaurante_index), class: "center-block"),
+                    restaurante_path(restaurante)%>
+        <h2 align="center"><%= restaurante.nombre %></h2>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="row text-center">
+    <% unless @search.plato.count == 0 %>
+      <% @search.plato.each do |plato| %>
+        <div class="col-12 col-md-4">
+          <% Restaurante.all.each do |restaurante| %>
+            <% if restaurante.id == plato.restaurante_id %>
+              <%= link_to image_tag(plato.plato_img.url(:medium), class: "center-block"), plato_path(plato, :id_restaurante => restaurante.id)%>
+              <% break %>
+            <% end %>
+          <% end %>
+          <h2 align="center"><%= plato.nombre %></h2>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<%end %>

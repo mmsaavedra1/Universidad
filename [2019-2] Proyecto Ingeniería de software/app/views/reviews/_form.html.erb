@@ -1,0 +1,18 @@
+<%= simple_form_for([@restaurante, @restaurante.reviews.build]) do |f| %>
+
+  <div id="rating-form">
+    <label>Valoración </label>
+  </div>
+  <%= f.input :comentario %>
+
+  <%= f.button :submit, class: "btn  btn-outline-dark" %>
+  <%= link_to "Volver", restaurante_path(params[:restaurante_id]), class: "btn  btn-outline-dark" %>
+<% end %>
+
+<script>
+    $('#rating-form').raty({
+        path: '/assets/',
+        scoreName: 'review[rating]'
+    });
+</script>
+

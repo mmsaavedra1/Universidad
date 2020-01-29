@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  keyword: MyString
+  ubicacion: MyString
+  min_rating: 1
+  max_rating: 1
+
+two:
+  keyword: MyString
+  ubicacion: MyString
+  min_rating: 1
+  max_rating: 1

@@ -1,0 +1,116 @@
+
+<!-- Informacion del Restaurante -->
+
+<div class="row">
+  <div class="col-12 col-md-3">
+  </div>
+
+  <div class="col-12 col-md-2">
+    <%= image_tag @restaurante.restaurante_img.url(:small), class: "img-responsive center-block"%>
+  </div>
+
+  <div class="col-12 col-md-7">
+    <h2><%= @restaurante.nombre %> </h2>
+    <div class="average-review-rating" data-score="<%= @average_review %>"></div>
+    <h3><b> Email: </b> <%= @restaurante.correo %> </h3>
+    <p> <b>Dirección: </b> <%= @restaurante.direccion %> |
+    <b> Contacto: </b><%= @restaurante.numero_telefono %></p>
+
+    <!-- Solo si el usuario administrador está logeado se puede tomar accion de edicion y elminacion-->
+    <% if user_signed_in? %>
+      <% if current_user.email == @restaurante.correo%>
+        <%= link_to "Agregar plato", new_plato_path(id_restaurante: @restaurante.id), class: "btn  btn-outline-dark btn-sm" %>
+        <%= link_to 'Editar información', edit_restaurante_path(id_restaurante: @restaurante.id), class: "btn  btn-outline-dark btn-sm" %>
+      <% elsif current_user.email != "admin@uc.cl" %>
+        <% if Favorito.where(:user_id => current_user.id, :restaurante_id => @restaurante.id).count == 0 %>
+          <%= link_to 'Agregar a favoritos', restaurante_path(@restaurante.id, :nombre => 'agregar_favorito'), class: "btn  btn-outline-dark btn-sm" %>
+        <% else %>
+          <%= link_to 'Eliminar de favoritos', restaurante_path(@restaurante.id, :nombre => 'quitar_favorito'), class: "btn  btn-outline-danger btn-sm" %>
+        <% end %>
+      <% end %>
+
+      <% if current_user.email == @restaurante.correo || current_user.email == "admin@uc.cl" %>
+         <%= link_to 'Eliminar Restaurante', restaurante_path(@restaurante.id), method: :delete, data: { confirm: '¿Confirmas eliminación de restaurante?' }, class: "btn  btn-outline-danger btn-sm"%>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<br><br>
+
+<%if Plato.all.count == 0 %>
+  <h1 align="center">~ ¡No hay platos registrados hasta el momento! ~</h1>
+<% else %>
+  <h1 align="center" >⭑ Platos de disponibles en el restaurante ⭑</h1>
+  <br><br>
+<% end %>
+
+
+<!-- Comentarios y platos disponibles -->
+<div class="row text-center">
+
+  <!-- Aqui es donde iran los comentarios-->
+  <div class="col-12 col-md-3">
+    <h3  font="arial">Comentarios del Restaurante</h3>
+    <br>
+    <!-- Se depliegan los comentarios -->
+    <%= render @restaurante.reviews %>
+
+    <!-- Se puede comentar -->
+    <div>
+      <% if user_signed_in? && current_user.email != @restaurante.correo && current_user.email != "admin@uc.cl" %>
+        <%= link_to "Dejar comentario", new_restaurante_review_path(@restaurante), class: "btn btn-outline-dark" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-md-9">
+    <div class="row text-center">
+      <!-- Se despliegan los platos a consumir -->
+      <% Plato.all.order(:nombre).each do |plato| %>
+        <% if plato.restaurante_id == @restaurante.id %>
+
+            <div class="col-12 col-md-4">
+              <%= link_to image_tag(plato.plato_img.url(:medium), class: "center-block"), plato_path(plato, id_restaurante: @restaurante.id) %>
+
+              <h4 align="center"> <b><%= plato.nombre %></b> </h4>
+              <p align="center"> <div class="average-review-rating" data-score="<%= plato.valoracion %>"></div> </p>
+              <p align="center"> <%= plato.descripcion %> </p>
+              <p align="center"> <b>Cantidad personas:</b> <%= plato.cantidad_personas_sugeridas %></p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+<!-- Para regresar al menú prinipal -->
+<br><br>
+<h1 align="center" ><%= link_to '⭑ Volver al catálogo de restaurantes ⭑', restaurantes_path, class:"btn btn-outline-dark btn-lg btn-block"%></h1>
+
+
+
+
+
+<!-- Script para hacer visible la valoracion de cada comentario-->
+<script>
+    $('.review-rating').raty({
+        readOnly: true,
+        score: function() {
+            return $(this).attr('data-score');
+        },
+        path: '/assets/'
+    });
+</script>
+
+<!-- Script para hacer visible el promedio de valoracion -->
+<script>
+    $('.average-review-rating').raty({
+        readOnly: true,
+        score: function() {
+            return $(this).attr('data-score');
+        },
+        path: '/assets/'
+    });
+</script>

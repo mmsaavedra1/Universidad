@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grupo15</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <!-- Pequeños cambios a Navbar-->
+    <style>
+      /* Remove the navbar's default rounded borders and increase the bottom margin */
+
+
+      /* Remove the jumbotron's default bottom margin */
+      .jumbotron {
+        margin-bottom: 0;
+      }
+
+      /* Add a gray background color and some padding to the footer */
+      footer {
+        background-color: #f2f2f2;
+        padding: 25px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="jumbotron">
+      <div class="container text-center">
+        <h1>Pedidos Restaurantes Online</h1>
+        <p>Grupo15</p>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="container" id="navbarTogglerDemo01">
+        <%= link_to "Home", root_path, class: "navbar-brand" %>
+        <!-- Listado de opciones-->
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <!-- Hace menu desplegable para acciones de usuario -->
+          <% if user_signed_in? %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="<%root_path%>" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Acciones permitidas
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <% if current_user.email == "admin@uc.cl" %>
+                   <%= link_to "Agregar Restaurante", new_restaurante_path, class: "dropdown-item"%>
+                  <% else %>
+                    <%= link_to "Ver historial pedidos",  ordens_path, class:"dropdown-item "%>
+                  <% end %>
+                </div>
+              </li>
+          <% end %>
+          <!-- Hace menu desplegable para sesion-->
+          <% if user_signed_in? %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="<%root_path%>" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sesión
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <%= link_to "Editar perfil",  edit_user_registration_path, class: "dropdown-item" %>
+                <%= link_to "Cerrar sesión", destroy_user_session_path, method: :delete, class: "dropdown-item"%>
+          <% else %>
+            <%= link_to "Registrar", new_user_registration_path, class: "dropdown-item"%>
+            <%= link_to "Iniciar sesión", new_user_session_path, class: "dropdown-item"%>
+            </div>
+            </li>
+          <% end %>
+        </ul>
+        <%= form_tag(restaurantes_path, {:method => 'get', :class => "form-inline"}) do %>
+          <p>
+            <%= text_field_tag :search, params[:search], class:"form-control mr-sm-2" %>
+            <%= submit_tag "Buscar", :name => nil, class: "btn btn-outline-dark my-2 my-sm-0"%>
+            <%= link_to "Búsqueda avanzada", new_search_path, class: "btn btn-outline-secondary my-2 my-sm-0" %>
+          </p>
+        <% end %>
+      </div>
+    </nav>
+
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+</html>

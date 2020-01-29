@@ -1,0 +1,30 @@
+
+<% if Restaurante.all.count == 0 %>
+  <h1 align="center">No hay restaurantes para buscar</h1>
+  <h1 align="center">😭😭😭😭</h1>
+
+<% else %>
+  <h1 align="center">Búsqueda avanzada</h1>
+
+  <%= simple_form_for(@search) do |f| %>
+    <div class="form-inputs">
+      <% unless Plato.all.count == 0 %>
+        <%= f.input :opcion, label: '¿Sobre que objeto deseas buscar?',hint: 'Sobre que deseas hacer la búsqueda',
+                      as: :radio_buttons, collection: [['Restaurante', 0],['Plato', 1]], checked: ['Restaurante', '0'] %>
+        <%= f.input :keyword, hint: 'Palabra clave a buscar'%>
+        <%= f.input :ubicacion, hint: 'Busca por descripción (plato) o dirección (restaurante)', label: 'Descripción' %>
+        <%= f.input :min_rating, label: 'Valoración mínima', collection: 0..5, selected: 0, hint: 'Indica valoración mínimima' %>
+        <%= f.input :max_rating, label: 'Valoración máxima', collection: 0..5, selected: 5, hint: 'Indica valoración máxima' %>
+      <% else %>
+        <%= f.input :opcion, label: '¿Sobre que objeto deseas buscar?',hint: 'Sobre que deseas hacer la búsqueda',
+                    as: :radio_buttons, collection: [['Restaurante', 0]], checked: ['Restaurante', '0'] %>
+        <%= f.input :keyword, hint: 'Palabra clave a buscar'%>
+        <%= f.input :ubicacion, hint: 'Busca por dirección', label: 'Descripción' %>
+        <%= f.input :min_rating, label: 'Valoración mínima', collection: 0..5, selected: 0, hint: 'Indica valoración mínimima' %>
+        <%= f.input :max_rating, label: 'Valoración máxima', collection: 0..5, selected: 5, hint: 'Indica valoración máxima' %>
+        </div>
+    <% end %>
+    <%= f.button :submit, 'Buscar', class:"btn btn-outline-dark my-2 my-sm-0" %>
+    <%= link_to 'Volver', root_path, class:"btn btn-outline-dark my-2 my-sm-0" %>
+  <% end %>
+<% end %>
