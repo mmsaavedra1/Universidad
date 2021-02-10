@@ -21,4 +21,7 @@ API construida en Flask que consulta información almacenada en JSON con gestor 
 Una vez como ayudante del ramo mencionado arriba, hice códigos según los temarios del curso. Se ocupó fuertemente Python y Gurobi. Link actual del repositorio: https://github.com/mmsaavedra1/ICS2121-Metodos-de-optimizacion
 
 # [2019-2] Proyecto Ingeniería de software📲
-Proyecto del curso y primer acercamiento a la programación de páginas web. Ocupando Ruby & Rails, Postgresql y Docker.
+Proyecto del curso y primer acercamiento a la programación de páginas web. Ocupando Ruby & Rails, Postgresql y Docker.  
+
+# [2020-2] Programación en C😰
+Tareas resueltas del curso Estructuras de datos y algoritmos.
